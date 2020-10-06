@@ -1,0 +1,109 @@
+
+  <br>
+  <br>
+<table class="table table-hover text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">With Chronic Diseases</th>
+        <th scope="col">Status</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="loadedCases.length < 1 && !isFetching">
+        <td colspan=7>No Cases Available</td>
+      </tr>
+      <tr *ngIf="isFetching">
+        <td colspan=7 class="text-center">Loading...</td>
+      </tr>
+      <tr *ngFor="let Case of loadedCases; let i = index">
+        <th scope="row">{{ i+1 }}</th>
+        <!-- View Mode -->
+        <td>{{ Case.firstName }}</td>
+        <td>{{ Case.lastName }}</td>
+        <td>{{ Case.withChronicDiseases }}</td>
+        <td>{{ Case.status }}</td>
+        <td><button type="button" data-toggle="modal" 
+          data-target="#editModal"
+           class="btn btn-warning"
+          (click)="caseId = Case.id">Edit</button></td>
+        <td><button class="btn btn-danger"
+          (click)="deleteCase(Case.id)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Case</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  <form #caseForm="ngForm" (ngSubmit)="editCaseData(caseForm.value, caseId)">
+    <div class="modal-body">
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="FirstName">First Name:</label>
+        <input type="text" class="form-control" 
+        id="editedFirstName"
+        required
+        ngModel
+        name="FirstName" 
+        placeholder="Enter First Name"
+        [(ngModel)]="firstName">
+      </div>
+      <div class="form-group col">
+        <label for="LastName">Last Name:</label>
+        <input type="tetx" class="form-control"
+        id="editedLastName"
+        required
+        ngModel
+        name="LastName"
+        placeholder="Enter Last Name"
+        [(ngModel)]="lastName">
+      </div>
+      <div class="form-group col">
+        <label for="Status">Status</label>
+            <select class="custom-select" 
+            id="editedStatus"
+            ngModel
+            name="Status"
+            [(ngModel)]="status">
+              <option value="Confirmed">Confirmed</option>
+              <option value="Recovered">Recovered</option>
+              <option value="Dead">Dead</option>
+            </select>
+          </div>
+        </div>
+          <div class="form-row">
+            <div class="form-group row">
+              <div class="col">
+                <div class="form-check">
+              <input type="checkbox" class="form-check-input" 
+            id="editedWithChronicDiseases"
+              ngModel
+              name="WithChronicDiseases"
+              [(ngModel)]="withChronicDiseases">
+            <label class="form-check-label" for="WithChronicDiseases">With Chronic Diseases</label>
+          </div>
+        </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" 
+      data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-success" 
+      [disabled]="!caseForm.valid">Save Changes</button>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
